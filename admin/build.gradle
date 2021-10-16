@@ -1,0 +1,90 @@
+
+group 'wfmproject'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'taskctrl-admin'
+    version =  '0.1.0'
+}
+
+repositories {
+    flatDir {
+        dirs "$rootProject.projectDir/lib"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    dependencies {
+        compile 'org.json:json:20160212'
+    }
+
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework:spring-jdbc")
+    compile files('./lib/wfmcommon-lib-0.1.0.jar')
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+
+
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.apache.poi:poi-ooxml:3.12")
+
+    compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+    compile group: 'commons-io', name: 'commons-io', version: '2.0.1'
+    compile group: 'commons-net',name: 'commons-net', version: '3.6'
+    compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.4.3'
+    compile group: 'com.lowagie', name: 'itext', version: '2.1.7'
+    compile group: 'org.olap4j', name: 'olap4j', version: '1.2.0'
+    compile group: 'javax.mail', name: 'mail', version: '1.4.1'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.1'
+    compile group: 'org.springframework', name: 'spring-jms', version: '2.5'
+    compile group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
+    compile group: 'com.google.gcm', name: 'gcm-server', version: '1.0.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.2.2'
+    compile group: 'net.sf.ehcache', name: 'ehcache-core', version: '2.4.6'
+
+
+    // end::actuator[]
+
+    runtime("mysql:mysql-connector-java:8.0.11")
+
+    testCompile("junit:junit")
+}
+
+task compile {
+    doLast {
+        println 'compiling source'
+    }
+}
+
+bootRun {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
+}
+
